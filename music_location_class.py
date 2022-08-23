@@ -135,7 +135,7 @@ if __name__ == "__main__":
         signal_num_est[1][:]=m2;
         signal_num_est[2][:]=m3;
         signal_num_est[3][:]=m4;
-        start_time=time.time();
+        start_time=time.time(); 
         loca.location(signal_num_est);
         print("time cost :",start_time-time.time());
     plt.show();
