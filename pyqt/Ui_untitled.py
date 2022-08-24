@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'e:\项目文件\电赛\pyqt_test\untitled.ui'
+# Form implementation generated from reading ui file 'e:\项目文件\电赛\2022_dians_E\pyqt\untitled.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
 #
@@ -19,28 +19,23 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(600, 310, 121, 51))
+        self.pushButton.setGeometry(QtCore.QRect(550, 130, 121, 51))
         self.pushButton.setObjectName("pushButton")
         self.textBrowser = QtWidgets.QTextBrowser(self.centralwidget)
-        self.textBrowser.setGeometry(QtCore.QRect(680, 110, 211, 151))
+        self.textBrowser.setGeometry(QtCore.QRect(560, 20, 191, 81))
         self.textBrowser.setObjectName("textBrowser")
-        self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(680, 20, 211, 61))
-        font = QtGui.QFont()
-        font.setFamily("Adobe Heiti Std")
-        font.setPointSize(48)
-        self.label.setFont(font)
-        self.label.setLineWidth(1)
-        self.label.setObjectName("label")
         self.graphicsView = PlotWidget(self.centralwidget)
-        self.graphicsView.setGeometry(QtCore.QRect(10, 40, 521, 231))
+        self.graphicsView.setGeometry(QtCore.QRect(10, 10, 521, 231))
         self.graphicsView.setObjectName("graphicsView")
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_2.setGeometry(QtCore.QRect(840, 310, 131, 51))
+        self.pushButton_2.setGeometry(QtCore.QRect(770, 120, 131, 51))
         self.pushButton_2.setObjectName("pushButton_2")
         self.graphicsView_2 = PlotWidget(self.centralwidget)
-        self.graphicsView_2.setGeometry(QtCore.QRect(10, 300, 521, 251))
+        self.graphicsView_2.setGeometry(QtCore.QRect(10, 250, 521, 251))
         self.graphicsView_2.setObjectName("graphicsView_2")
+        self.graphicsView_3 = PlotWidget(self.centralwidget)
+        self.graphicsView_3.setGeometry(QtCore.QRect(540, 200, 471, 301))
+        self.graphicsView_3.setObjectName("graphicsView_3")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1024, 23))
@@ -57,6 +52,5 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.pushButton.setText(_translate("MainWindow", "PushButton"))
-        self.label.setText(_translate("MainWindow", "TEST"))
         self.pushButton_2.setText(_translate("MainWindow", "refresh data"))
 from pyqtgraph import PlotWidget
