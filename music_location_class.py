@@ -76,12 +76,61 @@ class music_location():
         print("max index :",maxindex)
         resangle=-30+maxindex*0.1;
         print("angle:  ",resangle);
+        print("max val              :",res[maxindex])
         
         # plt.figure(3);
         # plt.plot(np.arange(-30,30,0.1),res); 
         return res;
 
-        
+
+
+def sim_data(freq,sp,angle):
+    distance_mic=0.05;  #阵元间距  小于波长的一半
+    wavespeed=340;      #波速
+    miccount=4;         #阵元数量
+    fs=48000;           #采样频率
+    ts=1/fs;            #时域采样周期
+    # freq=2000;          #信号频率
+    noise_freq=80;     #噪音频率     
+    # sp=2000;            #采样点数
+
+    freq_res=fs/sp;     #fft 频率分辨率
+    signal_num=1;       #信源数量
+    dc_va=0;            #信源直流分量
+
+    noise_exp=10;       #噪声期望
+    noise_var=3;        #噪声标准差
+
+    wave_arived_angle=angle;        #信源角度
+    dtorad=np.pi/180;               #degrad 转 rad 
+
+    x=np.linspace(0,sp/fs,sp);      
+    m1=np.zeros(sp);
+    m2=np.zeros(sp);
+    m3=np.zeros(sp);
+    m4=np.zeros(sp);
+    # print(np.random.normal(noise_exp,noise_var,1000))
+    
+    m1=20*np.sin((freq*2*np.pi)*(x-(0*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)))+dc_va+np.random.normal(noise_exp,noise_var,sp);
+    m2=20*np.sin((freq*2*np.pi)*(x-(1*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)))+dc_va+np.random.normal(noise_exp,noise_var,sp);
+    m3=20*np.sin((freq*2*np.pi)*(x-(2*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)))+dc_va+np.random.normal(noise_exp,noise_var,sp);
+    m4=20*np.sin((freq*2*np.pi)*(x-(3*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)))+dc_va+np.random.normal(noise_exp,noise_var,sp);
+
+    m1+=120*np.sin((noise_freq*2*np.pi)*(x-(0*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)));
+    m2+=120*np.sin((noise_freq*2*np.pi)*(x-(1*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)));
+    m3+=120*np.sin((noise_freq*2*np.pi)*(x-(2*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)));
+    m4+=120*np.sin((noise_freq*2*np.pi)*(x-(3*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)));
+
+
+    
+
+    #信号源数量估计   窄带信号的协方差矩阵分解  特征值估计法 
+    signal_num_est=np.zeros([4,sp]);
+    signal_num_est[0][:]=m1;
+    signal_num_est[1][:]=m2;
+    signal_num_est[2][:]=m3;
+    signal_num_est[3][:]=m4;
+    return signal_num_est;
 
         
 if __name__ == "__main__":
@@ -108,7 +157,7 @@ if __name__ == "__main__":
     dc_va=500;          #信源直流分量
 
     noise_exp=10;        #噪声期望
-    noise_var=130;        #噪声标准差
+    noise_var=3;        #噪声标准差
 
     wave_arived_angle=18;        #信源角度
     wave_arived_angle2=10;
@@ -122,10 +171,10 @@ if __name__ == "__main__":
     # print(np.random.normal(noise_exp,noise_var,1000))
     
     while True:
-        m1=100*np.sin((freq*2*np.pi)*(x-(0*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)))+dc_va+np.random.normal(noise_exp,noise_var,1000);
-        m2=100*np.sin((freq*2*np.pi)*(x-(1*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)))+dc_va+np.random.normal(noise_exp,noise_var,1000);
-        m3=100*np.sin((freq*2*np.pi)*(x-(2*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)))+dc_va+np.random.normal(noise_exp,noise_var,1000);
-        m4=100*np.sin((freq*2*np.pi)*(x-(3*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)))+dc_va+np.random.normal(noise_exp,noise_var,1000);
+        m1=20*np.sin((freq*2*np.pi)*(x-(0*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)))+dc_va+np.random.normal(noise_exp,noise_var,1000);
+        m2=20*np.sin((freq*2*np.pi)*(x-(1*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)))+dc_va+np.random.normal(noise_exp,noise_var,1000);
+        m3=20*np.sin((freq*2*np.pi)*(x-(2*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)))+dc_va+np.random.normal(noise_exp,noise_var,1000);
+        m4=20*np.sin((freq*2*np.pi)*(x-(3*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)))+dc_va+np.random.normal(noise_exp,noise_var,1000);
 
 
 

@@ -2,6 +2,7 @@ import numpy as np
 import pyqtgraph as pg
 import time
 import threading
+from PyQt5.QtCore import QTimer,QDateTime
 
 import music_location_class as mlc
 import mic_record_class as mr
@@ -37,18 +38,24 @@ mywindows=tmain.mywindows()
     
 
 def get_angle():
-    data=record1.read_record_buffer();
-    locas.location(data[:4,:])
+    # data=record1.read_record_buffer();
+    data=mlc.sim_data(freq=freq,
+                        sp=CHUNK,
+                        angle=0.1);
+    res=locas.location(data[:4,:])
     mywindows.plot_data.setData(data[3,:]);
     fft_res=abs(np.fft.fft(data[3,:]))
     mywindows.plot_data_2.setData((fs/sp)*np.linspace(0,(sp/2)-1,sp//2),fft_res[:sp//2]);
+    mywindows.plot_data_3.setData(range(0,600,1),res);
     print("refreash")
     
-    timer=threading.Timer(0.3,get_angle);
-    timer.start();
+    # timer=threading.Timer(1,get_angle);
+    # timer.start();
 
-timer=threading.Timer(1,get_angle);
-timer.start();
+timer=QTimer();
+timer.timeout.connect(get_angle);
+
+timer.start(3000);
 
 tmain.sys.exit(app.exec_())
 

@@ -4,6 +4,7 @@ from turtle import pencolor
 from PyQt5.QtWidgets import QApplication, QDialog,QMainWindow,QWidget
 import numpy as np
 import Ui_untitled
+from PyQt5.QtCore import QTimer,QDateTime
 
 
 class mywindows():
@@ -18,9 +19,12 @@ class mywindows():
         
         
         self.ui.graphicsView_2.setBackground('w')
-        self.ui.graphicsView_2.setYRange(0, 10000)   
+        self.ui.graphicsView_2.setYRange(0, 40000)   
         self.ui.graphicsView_2.setXRange(0, 10000)   
         self.plot_data_2=self.ui.graphicsView_2.plot(pen='b');
+        
+        self.ui.graphicsView_3.setBackground('w')
+        self.plot_data_3=self.ui.graphicsView_3.plot(pen='b');
         
         
         self.mymain.show()
@@ -37,13 +41,20 @@ class mywindows():
         self.plot_data.setData(np.arange(100,150),np.random.rand(50));
         self.plot_data_2.setData(np.arange(100,150),np.random.rand(50));
 
-    
-    
+
+
+def test_setdata():
+    mywindows.plot_data.setData(np.arange(100,150),np.random.rand(50));
+    mywindows.plot_data_2.setData(np.arange(100,150),np.random.rand(50));
+    print("refresh")
     
 if  __name__ == "__main__":
     app = QApplication(sys.argv)
     
     mywindows=mywindows()
+    time1=QTimer();
+    time1.timeout.connect(test_setdata);
+    time1.start(1000);
     
     sys.exit(app.exec_())
 
