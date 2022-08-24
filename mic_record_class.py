@@ -23,6 +23,8 @@ import os
 class mic_record():
     def __init__(self,RECORD_DEVICE_NAME,RECORD_RATE,RECORD_CHANNELS,RECORD_WIDTH,CHUNK):
         self.p = pyaudio.PyAudio();
+        self.chunk=CHUNK
+        self.record_channels=RECORD_CHANNELS
         for self.index in range(0,self.p.get_device_count()):
             self.info=self.p.get_device_info_by_index(self.index);
             self.device_name = self.info.get("name");
@@ -44,9 +46,9 @@ class mic_record():
         print(self.device_name,":stream start");
     
     def read_record_buffer(self):
-        self.data = self.stream.read(CHUNK,exception_on_overflow = False);
+        self.data = self.stream.read(self.chunk,exception_on_overflow = False);
         self.data = np.frombuffer(self.data,dtype=np.short);
-        self.data=self.data.reshape(CHUNK,RECORD_CHANNELS);
+        self.data=self.data.reshape(self.chunk, self.record_channels);
         self.data=self.data.T;
         return self.data;
 

@@ -34,13 +34,15 @@ class music_location():
             self.fft_res[cnt,:]=np.fft.fft(data[cnt,:]);
         
         freq_counter=int(self.freq/self.freq_res);
+        freq_range_start=freq_counter-1
+        freq_range_end=freq_counter+0+1
 
         rxx=np.zeros((7,self.miccount,self.miccount),dtype=np.complex);
         eigvetor=np.zeros((7,self.miccount,self.miccount),dtype=np.complex);
         noise_eigvetor=np.zeros((7,self.miccount,self.miccount-1),dtype=np.complex);
 
         rxx_cnt=0;
-        for i in np.arange(freq_counter-3,freq_counter+3+1,1):  
+        for i in np.arange(freq_range_start,freq_range_end,1):  
             temp=np.zeros((self.miccount,1),dtype=np.complex);
             temp[0,0]=self.fft_res[0,i];
             temp[1,0]=self.fft_res[1,i];
@@ -57,7 +59,7 @@ class music_location():
         cnt=0;
         for deg in np.arange(-30,30,0.1):
             rxx_cnt=0;
-            for i in np.arange(freq_counter-3,freq_counter+3+1,1):  
+            for i in np.arange(freq_range_start,freq_range_end,1):  
                 n_freq=i*self.freq_res;  #频率
                 n_time=1/n_freq; #周期
                 dir_vetor=np.zeros([1,self.miccount],dtype=np.complex);
@@ -84,12 +86,12 @@ class music_location():
         
 if __name__ == "__main__":
 
-    distance_mic=0.08;  #阵元间距  小于波长的一半
+    distance_mic=0.05;  #阵元间距  小于波长的一半
     wavespeed=340;      #波速
     miccount=4;         #阵元数量
     fs=48000;           #采样频率
     ts=1/fs;            #时域采样周期
-    freq=2000;           #信号频率
+    freq=2000;          #信号频率
     freq2=480; #     
     sp=1000;            #采样点数
 
@@ -106,7 +108,7 @@ if __name__ == "__main__":
     dc_va=500;          #信源直流分量
 
     noise_exp=10;        #噪声期望
-    noise_var=10;        #噪声标准差
+    noise_var=130;        #噪声标准差
 
     wave_arived_angle=18;        #信源角度
     wave_arived_angle2=10;
@@ -135,7 +137,7 @@ if __name__ == "__main__":
         signal_num_est[1][:]=m2;
         signal_num_est[2][:]=m3;
         signal_num_est[3][:]=m4;
-        start_time=time.time(); 
+        start_time=time.time();
         loca.location(signal_num_est);
         print("time cost :",start_time-time.time());
     plt.show();

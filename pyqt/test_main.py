@@ -13,12 +13,13 @@ class mywindows():
         self.ui.setupUi(self.mymain);
         
         self.ui.graphicsView.setBackground('w')
-        self.ui.graphicsView.setYRange(-1, 1)   
+        # self.ui.graphicsView.setYRange(-1, 1)   
         self.plot_data=self.ui.graphicsView.plot(pen='b');
         
         
         self.ui.graphicsView_2.setBackground('w')
-        self.ui.graphicsView_2.setYRange(-1, 1)   
+        self.ui.graphicsView_2.setYRange(0, 10000)   
+        self.ui.graphicsView_2.setXRange(0, 10000)   
         self.plot_data_2=self.ui.graphicsView_2.plot(pen='b');
         
         
