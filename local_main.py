@@ -13,7 +13,7 @@ RECORD_DEVICE_NAME = "Yundea 8MICA: USB Audio"
 RECORD_RATE = 48000
 RECORD_CHANNELS = 8
 RECORD_WIDTH = 2 #字节数
-CHUNK = 2000
+CHUNK = 1920
 record1=mr.mic_record(RECORD_DEVICE_NAME,RECORD_RATE,RECORD_CHANNELS,RECORD_WIDTH,CHUNK);
 
 distance_mic=0.05;  #阵元间距  小于波长的一半
@@ -38,16 +38,27 @@ mywindows=tmain.mywindows()
     
 
 def get_angle():
-    # data=record1.read_record_buffer();
-    data=mlc.sim_data(freq=freq,
-                        sp=CHUNK,
-                        angle=0.1);
-    res=locas.location(data[:4,:])
+    data=record1.read_record_buffer();
+    print(type(data[0,0]));
+    data=data.astype(np.float);
+    print(type(data[0,0]));
+    # data=mlc.sim_data(freq=freq,
+    #                     sp=CHUNK,
+    #                     angle=0.1);
+    st=time.time();
+    [res,angle]=locas.location(data[:4,:])
+
     mywindows.plot_data.setData(data[3,:]);
+    mywindows.plot_data_p2.setData(data[0,:]);
+
     fft_res=abs(np.fft.fft(data[3,:]))
     mywindows.plot_data_2.setData((fs/sp)*np.linspace(0,(sp/2)-1,sp//2),fft_res[:sp//2]);
+
+    fft_res=abs(np.fft.fft(data[0,:]))
+    mywindows.plot_data_2_p2.setData((fs/sp)*np.linspace(0,(sp/2)-1,sp//2),fft_res[:sp//2]);
     mywindows.plot_data_3.setData(range(0,600,1),res);
-    print("refreash")
+    mywindows.ui.textBrowser.setText(str(angle));
+    print(time.time()-st);
     
     # timer=threading.Timer(1,get_angle);
     # timer.start();

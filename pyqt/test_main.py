@@ -16,12 +16,14 @@ class mywindows():
         self.ui.graphicsView.setBackground('w')
         # self.ui.graphicsView.setYRange(-1, 1)   
         self.plot_data=self.ui.graphicsView.plot(pen='b');
+        self.plot_data_p2=self.ui.graphicsView.plot(pen='g');
         
         
         self.ui.graphicsView_2.setBackground('w')
         self.ui.graphicsView_2.setYRange(0, 40000)   
-        self.ui.graphicsView_2.setXRange(0, 10000)   
+        self.ui.graphicsView_2.setXRange(0, 3000)   
         self.plot_data_2=self.ui.graphicsView_2.plot(pen='b');
+        self.plot_data_2_p2=self.ui.graphicsView_2.plot(pen='g');
         
         self.ui.graphicsView_3.setBackground('w')
         self.plot_data_3=self.ui.graphicsView_3.plot(pen='b');

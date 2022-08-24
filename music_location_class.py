@@ -34,8 +34,9 @@ class music_location():
             self.fft_res[cnt,:]=np.fft.fft(data[cnt,:]);
         
         freq_counter=int(self.freq/self.freq_res);
-        freq_range_start=freq_counter-1
-        freq_range_end=freq_counter+0+1
+        print("freq_counter    =",freq_counter)
+        freq_range_start=freq_counter-0
+        freq_range_end=freq_counter+1
 
         rxx=np.zeros((7,self.miccount,self.miccount),dtype=np.complex);
         eigvetor=np.zeros((7,self.miccount,self.miccount),dtype=np.complex);
@@ -80,7 +81,7 @@ class music_location():
         
         # plt.figure(3);
         # plt.plot(np.arange(-30,30,0.1),res); 
-        return res;
+        return res,resangle;
 
 
 
@@ -99,7 +100,7 @@ def sim_data(freq,sp,angle):
     dc_va=0;            #信源直流分量
 
     noise_exp=10;       #噪声期望
-    noise_var=3;        #噪声标准差
+    noise_var=0.4;        #噪声标准差
 
     wave_arived_angle=angle;        #信源角度
     dtorad=np.pi/180;               #degrad 转 rad 
@@ -110,11 +111,12 @@ def sim_data(freq,sp,angle):
     m3=np.zeros(sp);
     m4=np.zeros(sp);
     # print(np.random.normal(noise_exp,noise_var,1000))
+    # print(type(m1[0]))
     
-    m1=20*np.sin((freq*2*np.pi)*(x-(0*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)))+dc_va+np.random.normal(noise_exp,noise_var,sp);
-    m2=20*np.sin((freq*2*np.pi)*(x-(1*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)))+dc_va+np.random.normal(noise_exp,noise_var,sp);
-    m3=20*np.sin((freq*2*np.pi)*(x-(2*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)))+dc_va+np.random.normal(noise_exp,noise_var,sp);
-    m4=20*np.sin((freq*2*np.pi)*(x-(3*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)))+dc_va+np.random.normal(noise_exp,noise_var,sp);
+    m1=2*np.sin((freq*2*np.pi)*(x-(0*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)))+dc_va+np.random.normal(noise_exp,noise_var,sp);
+    m2=2*np.sin((freq*2*np.pi)*(x-(1*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)))+dc_va+np.random.normal(noise_exp,noise_var,sp);
+    m3=2*np.sin((freq*2*np.pi)*(x-(2*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)))+dc_va+np.random.normal(noise_exp,noise_var,sp);
+    m4=2*np.sin((freq*2*np.pi)*(x-(3*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)))+dc_va+np.random.normal(noise_exp,noise_var,sp);
 
     m1+=120*np.sin((noise_freq*2*np.pi)*(x-(0*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)));
     m2+=120*np.sin((noise_freq*2*np.pi)*(x-(1*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)));
