@@ -46,10 +46,19 @@ class mic_record():
         print(self.device_name,":stream start");
     
     def read_record_buffer(self):
-        self.data = self.stream.read(self.chunk,exception_on_overflow = False);
+        # self.data = self.stream.read(self.chunk,exception_on_overflow = False);
+        # self.data = np.frombuffer(self.data,dtype=np.short);
+        # self.data=self.data.reshape(self.chunk, self.record_channels);
+        # self.data=self.data.T;
+        # return self.data;
+        
+        avaliable_num=self.stream.get_read_available()
+        print("number of frames that can be read without waiting :" , avaliable_num);
+        self.data = self.stream.read(avaliable_num,exception_on_overflow = False);
         self.data = np.frombuffer(self.data,dtype=np.short);
-        self.data=self.data.reshape(self.chunk, self.record_channels);
+        self.data=self.data.reshape(avaliable_num, self.record_channels);
         self.data=self.data.T;
+        self.data= self.data[:,avaliable_num-self.chunk:avaliable_num];
         return self.data;
 
 
@@ -64,7 +73,7 @@ def gp_data_process(n):
     start_time=time.time();
     data=n.read_record_buffer();
     print("date pre :",time.time()-start_time);
-    pw.setData(data[7,:]);
+    pw.setData(data[0,:]);
     print(time.time()-start_time);
     
 
@@ -77,15 +86,17 @@ if __name__ == "__main__":
     win = pg.GraphicsWindow(title="在同一个窗口，不同的图标中绘制双曲线");
     plot1 = win.addPlot();
     pw=plot1.plot();
-    RECORD_DEVICE_NAME = "Yundea 8MICA: USB Audio"
+    # RECORD_DEVICE_NAME = "Yundea 8MICA: USB Audio"
+    RECORD_DEVICE_NAME = "麦克风阵列 (YDM8MIC Audio)"
+    
     RECORD_RATE = 48000
     RECORD_CHANNELS = 8
     RECORD_WIDTH = 2 #字节数
-    CHUNK = 1024
+    CHUNK = 1920
     record1=mic_record(RECORD_DEVICE_NAME,RECORD_RATE,RECORD_CHANNELS,RECORD_WIDTH,CHUNK);
 
     timer = pg.QtCore.QTimer()
     timer.timeout.connect(lambda : gp_data_process(record1)) # 定时刷新数据显示
-    timer.start(100) # 多少ms调用一次
+    timer.start(2000) # 多少ms调用一次
 
     pg.QtGui.QApplication.exec_();

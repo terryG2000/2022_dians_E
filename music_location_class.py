@@ -16,7 +16,7 @@ class music_location():
     # fs=16000;           #采样频率
     # freq=672;           #信号频率
     # sp=1000;            #采样点数
-    def __init__(self,distance_mic_,wavespeed_,miccount_,fs_,freq_,sp_):
+    def __init__(self,distance_mic_,wavespeed_,miccount_,fs_,freq_,sp_,angle_range):
         self.distance_mic=distance_mic_;    #阵元间距  小于波长的一半
         self.wavespeed=wavespeed_;          #波速
         self.miccount=miccount_;            #阵元数量
@@ -25,7 +25,7 @@ class music_location():
         self.freq=freq_;                    #信号频率
         self.sp=sp_;                        #采样点数
         self.freq_res=self.fs/self.sp;      #fft 频率分辨率
-
+        self.angle_range=angle_range;
         self.dtorad=np.pi/180;                   #degrad 转 rad 
 
     def location(self,data):
@@ -55,10 +55,19 @@ class music_location():
             noise_eigvetor[rxx_cnt,:,:]=eigvetor[rxx_cnt,:,1:]
             rxx_cnt+=1;
         
+        # angle_1=np.arctan(self.fft_res[0][80].imag/self.fft_res[0][80].real);
+        # angle_2=np.arctan(self.fft_res[1][80].imag/self.fft_res[1][80].real);
+        # angle_3=np.arctan(self.fft_res[2][80].imag/self.fft_res[2][80].real);
+        # angle_4=np.arctan(self.fft_res[3][80].imag/self.fft_res[3][80].real);
+        
+        # print("angle between 1 and 2:",angle_1-angle_2);
+        # print("angle between 2 and 3:",angle_2-angle_3);
+        # print("angle between 3 and 4:",angle_3-angle_4);
 
-        res=np.zeros(600);
+        res=np.zeros(int((self.angle_range[1]-self.angle_range[0])/0.1));
+        print("renge angle :",int((self.angle_range[1]-self.angle_range[0])/0.1))
         cnt=0;
-        for deg in np.arange(-30,30,0.1):
+        for deg in np.arange(self.angle_range[0],self.angle_range[1],0.1):
             rxx_cnt=0;
             for i in np.arange(freq_range_start,freq_range_end,1):  
                 n_freq=i*self.freq_res;  #频率
@@ -74,10 +83,10 @@ class music_location():
             cnt +=1;
 
         maxindex=np.argmax(res);
-        print("max index :",maxindex)
-        resangle=-30+maxindex*0.1;
+        # print("max index :",maxindex)
+        resangle=self.angle_range[0]+maxindex*0.1;
         print("angle:  ",resangle);
-        print("max val              :",res[maxindex])
+        # print("max val              :",res[maxindex])
         
         # plt.figure(3);
         # plt.plot(np.arange(-30,30,0.1),res); 
@@ -85,22 +94,22 @@ class music_location():
 
 
 
-def sim_data(freq,sp,angle):
+def sim_data(freq,sp,angle,noise_exp,noise_var):
     distance_mic=0.05;  #阵元间距  小于波长的一半
     wavespeed=340;      #波速
     miccount=4;         #阵元数量
     fs=48000;           #采样频率
     ts=1/fs;            #时域采样周期
     # freq=2000;          #信号频率
-    noise_freq=80;     #噪音频率     
+    noise_freq=30;     #噪音频率     
     # sp=2000;            #采样点数
 
     freq_res=fs/sp;     #fft 频率分辨率
     signal_num=1;       #信源数量
     dc_va=0;            #信源直流分量
 
-    noise_exp=10;       #噪声期望
-    noise_var=0.4;        #噪声标准差
+    # noise_exp=10;       #噪声期望
+    # noise_var=5;        #噪声标准差
 
     wave_arived_angle=angle;        #信源角度
     dtorad=np.pi/180;               #degrad 转 rad 
@@ -118,10 +127,10 @@ def sim_data(freq,sp,angle):
     m3=2*np.sin((freq*2*np.pi)*(x-(2*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)))+dc_va+np.random.normal(noise_exp,noise_var,sp);
     m4=2*np.sin((freq*2*np.pi)*(x-(3*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)))+dc_va+np.random.normal(noise_exp,noise_var,sp);
 
-    m1+=120*np.sin((noise_freq*2*np.pi)*(x-(0*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)));
-    m2+=120*np.sin((noise_freq*2*np.pi)*(x-(1*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)));
-    m3+=120*np.sin((noise_freq*2*np.pi)*(x-(2*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)));
-    m4+=120*np.sin((noise_freq*2*np.pi)*(x-(3*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)));
+    m1+=20*np.sin((noise_freq*2*np.pi)*(x-(0*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)));
+    m2+=20*np.sin((noise_freq*2*np.pi)*(x-(1*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)));
+    m3+=20*np.sin((noise_freq*2*np.pi)*(x-(2*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)));
+    m4+=20*np.sin((noise_freq*2*np.pi)*(x-(3*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)));
 
 
     
@@ -152,16 +161,17 @@ if __name__ == "__main__":
                             miccount_=miccount,
                             fs_=fs,
                             freq_=freq,
-                            sp_=sp);
+                            sp_=sp,
+                            angle_range=[-60,60]);
 
     freq_res=fs/sp;     #fft 频率分辨率
     signal_num=1;       #信源数量
     dc_va=500;          #信源直流分量
 
-    noise_exp=10;        #噪声期望
-    noise_var=3;        #噪声标准差
+    noise_exp=100;        #噪声期望
+    noise_var=4;        #噪声标准差
 
-    wave_arived_angle=18;        #信源角度
+    wave_arived_angle=58;        #信源角度
     wave_arived_angle2=10;
     dtorad=np.pi/180;               #degrad 转 rad 
 
@@ -190,7 +200,7 @@ if __name__ == "__main__":
         signal_num_est[3][:]=m4;
         start_time=time.time();
         loca.location(signal_num_est);
-        print("time cost :",start_time-time.time());
+        # print("time cost :",start_time-time.time());
     plt.show();
     print("end")
     
