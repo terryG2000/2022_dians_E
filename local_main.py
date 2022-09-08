@@ -21,10 +21,10 @@ CHUNK = 1920
 distance_mic=0.05;  #阵元间距  小于波长的一半
 wavespeed=347;      #波速
 miccount=4;         #阵元数量
-fs=RECORD_RATE;           #采样频率
+fs=RECORD_RATE;     #采样频率
 ts=1/fs;            #时域采样周期
 freq=2000;          #信号频率
-sp=CHUNK;            #采样点数
+sp=CHUNK;           #采样点数
 
 
 locas=mlc.music_location(distance_mic_=distance_mic,
@@ -40,7 +40,6 @@ app = tmain.QApplication(tmain.sys.argv)
 mywindows=tmain.mywindows()
     
 re_wave=read_from_wave_class.read_frome_wave();
-def get_angle():
     # data=record1.read_record_buffer();
     
     # print(type(data[0,0]));
@@ -57,15 +56,15 @@ def get_angle():
     data=re_wave.read_frames(4,1920);
     
     st=time.time();
-    [res,angle]=locas.location(data[:4,:])
+    [res,angle]=locas.location(data[:4,:]);
 
     mywindows.plot_data.setData(data[3,:]);
-    mywindows.plot_data_p2.setData(data[0,:]);
+    # mywindows.plot_data_p2.setData(data[0,:]);
 
     fft_res=abs(np.fft.fft(data[3,:]))
     mywindows.plot_data_2.setData((fs/sp)*np.linspace(0,(sp/2)-1,sp//2),fft_res[:sp//2]);
 
-    fft_res=abs(np.fft.fft(data[0,:]))
+    fft_res=abs(np.fft.fft(data[0,:]));
     mywindows.plot_data_2_p2.setData((fs/sp)*np.linspace(0,(sp/2)-1,sp//2),fft_res[:sp//2]);
     mywindows.plot_data_3.setData(range(0,1000,1),res);
     mywindows.ui.textBrowser.setText(str(angle));
