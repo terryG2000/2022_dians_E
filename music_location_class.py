@@ -35,12 +35,12 @@ class music_location():
         
         freq_counter=int(self.freq/self.freq_res);
         print("freq_counter    =",freq_counter)
-        freq_range_start=freq_counter-0
+        freq_range_start=freq_counter-1
         freq_range_end=freq_counter+1
 
-        rxx=np.zeros((7,self.miccount,self.miccount),dtype=np.complex);
-        eigvetor=np.zeros((7,self.miccount,self.miccount),dtype=np.complex);
-        noise_eigvetor=np.zeros((7,self.miccount,self.miccount-1),dtype=np.complex);
+        rxx=np.zeros((25,self.miccount,self.miccount),dtype=np.complex);
+        eigvetor=np.zeros((25,self.miccount,self.miccount),dtype=np.complex);
+        noise_eigvetor=np.zeros((25,self.miccount,self.miccount-1),dtype=np.complex);
 
         rxx_cnt=0;
         for i in np.arange(freq_range_start,freq_range_end,1):  
@@ -127,10 +127,10 @@ def sim_data(freq,sp,angle,noise_exp,noise_var):
     m3=2*np.sin((freq*2*np.pi)*(x-(2*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)))+dc_va+np.random.normal(noise_exp,noise_var,sp);
     m4=2*np.sin((freq*2*np.pi)*(x-(3*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)))+dc_va+np.random.normal(noise_exp,noise_var,sp);
 
-    m1+=20*np.sin((noise_freq*2*np.pi)*(x-(0*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)));
-    m2+=20*np.sin((noise_freq*2*np.pi)*(x-(1*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)));
-    m3+=20*np.sin((noise_freq*2*np.pi)*(x-(2*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)));
-    m4+=20*np.sin((noise_freq*2*np.pi)*(x-(3*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)));
+    # m1+=20*np.sin((noise_freq*2*np.pi)*(x-(0*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)));
+    # m2+=20*np.sin((noise_freq*2*np.pi)*(x-(1*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)));
+    # m3+=20*np.sin((noise_freq*2*np.pi)*(x-(2*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)));
+    # m4+=20*np.sin((noise_freq*2*np.pi)*(x-(3*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)));
 
 
     

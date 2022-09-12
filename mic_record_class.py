@@ -14,11 +14,15 @@ import sys
 import os
 
 
+# README
+
 # https://people.csail.mit.edu/hubert/pyaudio/docs/
 #pyaudio documentation
 # https://github.com/jim2meng/dueros/blob/master/example/record.py
 #淘宝客服参考代码连接
 
+# 在win10下使用时需修改麦克风设置 右击麦克风选择打开声音设置 点击右边声音控制面板
+# 选择需要用的麦克风设置位默认设备 打卡监听此设备
 
 class mic_record():
     def __init__(self,RECORD_DEVICE_NAME,RECORD_RATE,RECORD_CHANNELS,RECORD_WIDTH,CHUNK):
@@ -73,7 +77,7 @@ def gp_data_process(n):
     start_time=time.time();
     data=n.read_record_buffer();
     print("date pre :",time.time()-start_time);
-    pw.setData(data[0,:]);
+    pw.setData(data[3,:]);
     print(time.time()-start_time);
     
 
@@ -97,6 +101,6 @@ if __name__ == "__main__":
 
     timer = pg.QtCore.QTimer()
     timer.timeout.connect(lambda : gp_data_process(record1)) # 定时刷新数据显示
-    timer.start(2000) # 多少ms调用一次
+    timer.start(200) # 多少ms调用一次
 
     pg.QtGui.QApplication.exec_();

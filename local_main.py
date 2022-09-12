@@ -15,8 +15,8 @@ RECORD_DEVICE_NAME="麦克风阵列 (YDM8MIC Audio)"
 RECORD_RATE = 48000
 RECORD_CHANNELS = 8
 RECORD_WIDTH = 2 #字节数
-CHUNK = 1920
-# record1=mr.mic_record(RECORD_DEVICE_NAME,RECORD_RATE,RECORD_CHANNELS,RECORD_WIDTH,CHUNK);
+CHUNK = 1920*2
+record1=mr.mic_record(RECORD_DEVICE_NAME,RECORD_RATE,RECORD_CHANNELS,RECORD_WIDTH,CHUNK);
 
 distance_mic=0.05;  #阵元间距  小于波长的一半
 wavespeed=347;      #波速
@@ -40,7 +40,8 @@ app = tmain.QApplication(tmain.sys.argv)
 mywindows=tmain.mywindows()
     
 re_wave=read_from_wave_class.read_frome_wave();
-    # data=record1.read_record_buffer();
+def get_angle():
+    data=record1.read_record_buffer();
     
     # print(type(data[0,0]));
     # data=data.astype(np.float);
@@ -53,7 +54,7 @@ re_wave=read_from_wave_class.read_frome_wave();
     #                     noise_var=4);
     
     
-    data=re_wave.read_frames(4,1920);
+    # data=re_wave.read_frames(4,CHUNK);
     
     st=time.time();
     [res,angle]=locas.location(data[:4,:]);
@@ -78,7 +79,7 @@ timer.timeout.connect(get_angle);
 
 timer.start(300);
 
-tmain.sys.exit(app.exec_())
+tmain.sys.exit(app.exec_());
 
 
 # timer = pg.QtCore.QTimer()
