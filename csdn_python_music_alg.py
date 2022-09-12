@@ -1,3 +1,8 @@
+import pyaudio
+import numpy as np
+import matplotlib.pyplot as plt
+
+
 nmicro=16
 layers = 2
 micros_every_layer = nmicro//layers

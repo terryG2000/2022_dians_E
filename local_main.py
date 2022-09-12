@@ -16,7 +16,7 @@ RECORD_RATE = 48000
 RECORD_CHANNELS = 8
 RECORD_WIDTH = 2 #字节数
 CHUNK = 1920*2
-record1=mr.mic_record(RECORD_DEVICE_NAME,RECORD_RATE,RECORD_CHANNELS,RECORD_WIDTH,CHUNK);
+# record1=mr.mic_record(RECORD_DEVICE_NAME,RECORD_RATE,RECORD_CHANNELS,RECORD_WIDTH,CHUNK);
 
 distance_mic=0.05;  #阵元间距  小于波长的一半
 wavespeed=347;      #波速
@@ -41,18 +41,17 @@ mywindows=tmain.mywindows()
     
 re_wave=read_from_wave_class.read_frome_wave();
 def get_angle():
-    data=record1.read_record_buffer();
+    # data=record1.read_record_buffer();
     
     # print(type(data[0,0]));
     # data=data.astype(np.float);
     # print(type(data[0,0]));
     
-    # data=mlc.sim_data(freq=freq,
-    #                     sp=CHUNK,
-    #                     angle=40,
-    #                     noise_exp=0,
-    #                     noise_var=4);
-    
+    data=mlc.sim_data(freq=freq,
+                        sp=CHUNK,
+                        angle=40,
+                        noise_exp=0,
+                        noise_var=1);
     
     
     # data=re_wave.read_frames(4,CHUNK);
