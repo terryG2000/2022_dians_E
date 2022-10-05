@@ -47,14 +47,14 @@ def get_angle():
     # data=data.astype(np.float);
     # print(type(data[0,0]));
     
-    data=mlc.sim_data(freq=freq,
-                        sp=CHUNK,
-                        angle=40,
-                        noise_exp=0,
-                        noise_var=1);
+    # data=mlc.sim_data(freq=freq,
+    #                     sp=CHUNK,
+    #                     angle=00,
+    #                     noise_exp=0,
+    #                     noise_var=1);
     
     
-    # data=re_wave.read_frames(4,CHUNK);
+    data=re_wave.read_frames(4,CHUNK);
     
     st=time.time();
     [res,angle]=locas.location(data[:4,:]);

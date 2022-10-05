@@ -43,6 +43,7 @@ class read_frome_wave():
                 data[i,:]=np.frombuffer(self.file_list[i].readframes(lenth),dtype=np.short);
             return data;
         except Exception as e:
+            print("read wave error\r\n");
             print(e);
             return data;
     def get_nframe(self):

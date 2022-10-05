@@ -27,6 +27,7 @@ class music_location():
         self.freq_res=self.fs/self.sp;      #fft 频率分辨率
         self.angle_range=angle_range;
         self.dtorad=np.pi/180;                   #degrad 转 rad 
+        self.signal_num=3;
 
     def location(self,data):
         self.fft_res=np.zeros([self.miccount,self.sp],dtype=np.complex);
@@ -41,18 +42,19 @@ class music_location():
 
         rxx=np.zeros((25,self.miccount,self.miccount),dtype=np.complex);
         eigvetor=np.zeros((25,self.miccount,self.miccount),dtype=np.complex);
-        noise_eigvetor=np.zeros((25,self.miccount,self.miccount-1),dtype=np.complex);
+        noise_eigvetor=np.zeros((25,self.miccount,self.miccount-self.signal_num),dtype=np.complex);
 
         rxx_cnt=0;
         for i in np.arange(freq_range_start,freq_range_end,1):  
             
             # temp=self.fft_res[:,i].reshape(self.miccount,-1);
-            temp=self.fft_res[:,i-6:i+6];
+            freq_width=6;
+            temp=self.fft_res[:,i-freq_width:i+freq_width];
             
             rxx[rxx_cnt,:,:]=np.dot(temp,temp.T.conjugate());  #计算每个频率下各个阵元的协方差矩阵
             # rxx[rxx_cnt,:,:]=np.dot(self.fft_res[:,i],self.fft_res[:,i].T.conjugate());  #计算每个频率下各个阵元的协方差矩阵
             eigvetor[rxx_cnt,:,:],eigval,_ = np.linalg.svd(rxx[rxx_cnt,:,:])                                                                                                                                                                                                                                                                
-            noise_eigvetor[rxx_cnt,:,:]=eigvetor[rxx_cnt,:,1:]
+            noise_eigvetor[rxx_cnt,:,:]=eigvetor[rxx_cnt,:,self.signal_num:]
             rxx_cnt+=1;
         
         # angle_1=np.arctan(self.fft_res[0][80].imag/self.fft_res[0][80].real);
@@ -101,7 +103,7 @@ def sim_data(freq,sp,angle,noise_exp,noise_var):
     fs=48000;           #采样频率
     ts=1/fs;            #时域采样周期
     # freq=2000;          #信号频率
-    noise_freq=30;     #噪音频率     
+    noise_freq=1990;     #噪音频率     
     # sp=2000;            #采样点数
 
     freq_res=fs/sp;     #fft 频率分辨率
@@ -127,10 +129,10 @@ def sim_data(freq,sp,angle,noise_exp,noise_var):
     m3=2*np.sin((freq*2*np.pi)*(x-(2*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)))+dc_va+np.random.normal(noise_exp,noise_var,sp);
     m4=2*np.sin((freq*2*np.pi)*(x-(3*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)))+dc_va+np.random.normal(noise_exp,noise_var,sp);
 
-    # m1+=20*np.sin((noise_freq*2*np.pi)*(x-(0*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)));
-    # m2+=20*np.sin((noise_freq*2*np.pi)*(x-(1*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)));
-    # m3+=20*np.sin((noise_freq*2*np.pi)*(x-(2*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)));
-    # m4+=20*np.sin((noise_freq*2*np.pi)*(x-(3*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)));
+    m1+=2*np.sin((noise_freq*2*np.pi)*(x-(0*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)));
+    m2+=2*np.sin((noise_freq*2*np.pi)*(x-(1*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)));
+    m3+=2*np.sin((noise_freq*2*np.pi)*(x-(2*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)));
+    m4+=2*np.sin((noise_freq*2*np.pi)*(x-(3*distance_mic*np.sin(wave_arived_angle*dtorad)/wavespeed)));
 
 
     

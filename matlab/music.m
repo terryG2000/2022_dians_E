@@ -15,7 +15,7 @@ A=exp(-j*twpi*d.'*sin(theta*derad));
 %A=exp(-j*twpi*d.'*0);
 sinwavel =linspace(0,2*pi,n);
 %sinwave=10*sin(30000*sinwavel)+1*sin(30000*sinwavel)+14*cos(30000*sinwavel);
-sinwave=sin(200*pi*sinwavel)+10*sin(300*sinwavel);
+sinwave=200+sin(200*pi*sinwavel)+10*sin(300*sinwavel);
 
 figure(4)
 plot(sinwavel,sinwave);
