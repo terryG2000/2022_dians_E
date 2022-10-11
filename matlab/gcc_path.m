@@ -9,7 +9,9 @@ Fs = 8192;
 %采样周期
 dt=1/Fs;
 %music_src为声源
-music_src=y;       
+music_src=y;    
+figure();
+plot(y);
 
 %设置两个麦克风坐标
 mic_d=1;
@@ -22,7 +24,7 @@ quiver(-5,0,10,0,1,'color','black');
 quiver(0,-5,0,10,1,'color','black');
 
 %声源位置
-s_x=20;
+s_x=-20;
 s_y=10;
 plot(s_x,s_y,'o');
 quiver(s_x,s_y,-s_x-mic_d,-s_y,1);
@@ -33,6 +35,7 @@ dis_s1=sqrt((mic_x(1)-s_x).^2+(mic_y(1)-s_y).^2);
 dis_s2=sqrt((mic_x(2)-s_x).^2+(mic_y(2)-s_y).^2);
 c=340;
 delay=abs((dis_s1-dis_s2)./340);
+delay=-1e-5;
 
 %设置延时
 music_delay = delayseq(music_src,delay,Fs);
@@ -44,6 +47,9 @@ subplot(212);
 plot(music_delay);
 axis([0 length(music_delay) -2 2]);
 
+figure(10);
+plot(abs(fft(music_delay)));
+
 %gccphat算法,matlab自带
 [tau,R,lag] = gccphat(music_delay,music_src,Fs);
 disp(tau);
@@ -53,7 +59,7 @@ plot(lag,real(R(:,1)));
 
 %cc算法
 [rcc,lag]=xcorr(music_delay,music_src);
-figure(4);
+figure('NumberTitle','off','Name','CC');
 plot(lag/Fs,rcc);
 [M,I] = max(abs(rcc));
 lagDiff = lag(I);
@@ -63,9 +69,27 @@ disp(timeDiff);
 %gcc+phat算法，根据公式写
 RGCC=fft(rcc);
 rgcc=ifft(RGCC*1./abs(RGCC));
-figure(5);
+figure('NumberTitle','off','Name','GCC');
 plot(lag/Fs,rgcc);
 [M,I] = max(abs(rgcc));
+lagDiff = lag(I);
+timeDiff = lagDiff/Fs;
+disp(timeDiff);
+
+
+%my gcc+phat算法，根据公式写
+src_fft=fft(music_src);
+src_delay_fft=fft(music_delay);
+Gfft=src_fft.*conj(src_delay_fft);
+inv_Gfft_non=ifft(Gfft);
+inv_Gfft=ifft(Gfft./abs(Gfft));
+figure();
+subplot(2,1,1);
+plot(angle(Gfft));
+subplot(2,1,2);
+plot(abs(inv_Gfft));
+
+[M,I] = max(abs(inv_Gfft));
 lagDiff = lag(I);
 timeDiff = lagDiff/Fs;
 disp(timeDiff);
@@ -77,4 +101,3 @@ angel=acos(tau*c./(mic_d*2))*180/pi;
 if dis_s1<dis_s2
     angel=180-angel;
 end
-disp(angel);

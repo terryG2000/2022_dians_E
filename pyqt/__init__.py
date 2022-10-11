@@ -10,6 +10,5 @@ print(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))#当前程序�
 '''
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) #当前程序上上一级目录，这里为mycompany
 BASE_DIR=os.path.dirname(os.path.abspath(__file__))
-print(os.path.dirname(os.path.abspath(__file__)))
+# print(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_DIR) #添加环境变量
-

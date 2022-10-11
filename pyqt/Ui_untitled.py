@@ -9,7 +9,11 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+# import sys 
+# sys.path.append("..") 
+# import test
+# from GCC_Method import test
+print(__name__)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):

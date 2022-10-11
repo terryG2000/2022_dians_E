@@ -4,6 +4,7 @@ from turtle import pencolor
 from PyQt5.QtWidgets import QApplication, QDialog,QMainWindow,QWidget
 import numpy as np
 import Ui_untitled
+# from pyqt.Ui_untitled import Ui_MainWindow
 from PyQt5.QtCore import QTimer,QDateTime
 
 
@@ -51,6 +52,8 @@ def test_setdata():
     print("refresh")
     
 if  __name__ == "__main__":
+    print("test \r\n");
+    print(sys.path);
     app = QApplication(sys.argv)
     
     mywindows=mywindows()
